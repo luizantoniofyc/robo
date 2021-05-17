@@ -8,7 +8,7 @@ Para testar a aplicação, basta clonar o respositório em sua máquina e builda
 * Controlador: inicialmente traz apenas um campo para informar o Id do Robô e, após clicar no botão "Aplicar", expõe os dados do robô com os botões de simulação. 
 
 ### Observações
-Para obter os Ids dos robôs para aplicar no controlador, basta copiar o conteúdo da coluna Id na lista de robôs.
+Antes de subir os projetos em conjunto é necessário buildar a Api de forma isolada para criação do XML de documentação do swagger.
 
 ### Endpoints implementados
 
