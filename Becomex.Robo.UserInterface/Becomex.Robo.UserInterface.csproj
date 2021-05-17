@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Becomex.Robo.Application\Becomex.Robo.Application.csproj" />
+    <ProjectReference Include="..\Bexomex.Robo.Domain\Bexomex.Robo.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

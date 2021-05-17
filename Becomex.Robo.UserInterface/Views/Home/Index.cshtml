@@ -1,0 +1,135 @@
+﻿@model Becomex.Robo.UserInterface.Models.RobotModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+
+<div>
+    <h1 class="display-4">Registrar</h1>
+    <div>
+        <form action="" name="registration" id="registrationForm">
+            <div class="form-group col-md-4">
+                <label for="">Nome</label>
+                @Html.TextBoxFor(x => x.Name, new { id = "name", @class = "form-control", @type = "text" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="">Descrição</label>
+                @Html.TextBoxFor(x => x.Description, new { id = "description", @class = "form-control", @type = "text" })
+            </div>
+            <div class="col-md-4" style="align-self: flex-end;">
+                <button id="btn_incluir" type="button" class="btn btn-md btn-info">Incluir Robô</button>
+            </div>
+        </form>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading text-center">
+                    <h3>Lista de Robôs Cadastrados</h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="robotTable" class="table table-striped table-bordered table-hover responsive" width="100%">
+                    <thead class="thin-border-bottom">
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+
+        $("form[name='registration']").validate({
+            onfocusout: false,
+            onkeyup: false,
+            rules: {
+                Name: "required",
+                Description: "required",
+            },
+            messages: {
+                Name: "O campo nome é obrigatório.",
+                Description: "O campo descrição é obrigatório.",
+            },
+            submitHandler: function (form) {
+                alert('teste');
+                /*form.submit();*/
+            }
+        });
+
+        $('#btn_incluir').on('click', function (e) {
+            e.preventDefault();
+
+            var url = "@ViewBag.RobotUrl";
+
+            var form = $('#registrationForm');
+
+            if ((form.valid()) && (form.valid())) {
+                var dados = {
+                    name: $('#name').val(),
+                    description: $('#description').val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify(dados),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $('#name').val('');
+                        $('#description').val('');
+                        $('#robotTable').DataTable().ajax.reload();
+                        $('#robotTable').DataTable().columns.adjust().draw();
+                    },
+                    function(result) {
+                        alert("Algo inesperado ocorreu durante a busca. Por favor, tente novamente!");
+                    }
+                });
+            }
+
+            
+        });
+
+        (function ($) {
+            var url = "@ViewBag.RobotUrl";
+
+            var oTable = $('#robotTable').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": url,
+                    "method": "GET",
+                    dataSrc: function (receivedData) {
+                        return receivedData;
+                    },
+                },
+                "columns": [
+                    { "data": "id" },
+                    { "data": "name" },
+                    { "data": "description" },
+                    { "data": "statusDescription" },
+                ],
+                "ordering": true,
+                "paging": true,
+                "pagingType": "full_numbers",
+                "pageLength": 3
+            });
+        })(jQuery);
+    </script>
+}

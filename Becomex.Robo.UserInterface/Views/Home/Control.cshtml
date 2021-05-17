@@ -1,0 +1,278 @@
+﻿@model Becomex.Robo.UserInterface.Models.RobotModel
+
+@{
+    ViewData["Title"] = "Controlador";
+}
+
+@section styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+}
+
+<div>
+    <h1 class="display-4">Controlador</h1>
+    <div>
+        <form action="" name="controller" id="controllerForm">
+            <div class="form-group col-md-4">
+                <label for="">Id do Robô</label>
+                @Html.TextBoxFor(x => x.Id, new { id = "robotId", @class = "form-control", @type = "text" })
+            </div>
+            <div class="col-md-4" style="align-self: flex-end;">
+                <button id="btn_aplicar" type="button" class="btn btn-md btn-info">Aplicar</button>
+                <button id="btn_trocar" type="button" class="btn btn-md btn-info">Trocar Robô</button>
+            </div>
+        </form>
+    </div>
+    <br />
+    <div id="details" class="row">
+        <div class="col-md-12">
+            <h3>Dados do Robô: </h3>
+            <p style="margin: 0;"><b>Nome: </b><span id="sNomeRobo"></span></p>
+            <p style="margin: 0;"><b>Descrição: </b><span id="sDescricaoRobo"></span></p>
+            <p style="margin: 0;"><b>Rotação da Cabeça: </b><span id="sRotacaoCabeca"></span></p>
+            <p style="margin: 0;"><b>Inclinação da Cabeça: </b><span id="sInclinacaoCabeca"></span></p>
+            <p style="margin: 0;"><b>Cotovelo (braço esquerdo): </b><span id="sCotoveloBracoEsquerdo"></span></p>
+            <p style="margin: 0;"><b>Cotovelo (braço direito): </b><span id="sCotoveloBracoDireito"></span></p>
+            <p style="margin: 0;"><b>Punho (braço esquerdo): </b><span id="sPunhoBracoEsquerdo"></span></p>
+            <p style="margin: 0;"><b>Punho (braço direito): </b><span id="sPunhoBracoDireito"></span></p>
+        </div>
+    </div>
+    <br />
+    <div id="update">
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Inclinação da cabeça:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnInclinacaoCima" type="button" class="btn btn-outline-secondary" onclick="changeHeadInclination(1);">Para Cima</button>
+                <button id="btnInclinacaoRepouso" type="button" class="btn btn-outline-secondary" onclick="changeHeadInclination(2);">Em Repouso</button>
+                <button id="btnInclinacaoBaixo" type="button" class="btn btn-outline-secondary" onclick="changeHeadInclination(3);">Para Baixo</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Rotação da cabeça:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnRotacaoMenos45" type="button" class="btn btn-outline-secondary" onclick="changeHeadRotation(1);">Rotação -90º</button>
+                <button id="btnRotacaoMenos90" type="button" class="btn btn-outline-secondary" onclick="changeHeadRotation(2);">Rotação -45º</button>
+                <button id="btnRotacaoRepouso" type="button" class="btn btn-outline-secondary" onclick="changeHeadRotation(3);">Em Repouso</button>
+                <button id="btnRotacaoMais45" type="button" class="btn btn-outline-secondary" onclick="changeHeadRotation(4);">Rotação 45º</button>
+                <button id="btnRotacaoMais90" type="button" class="btn btn-outline-secondary" onclick="changeHeadRotation(5);">Rotação 90º</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Cotovelo Esquerdo:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnCotoveloEsquerdoRepouso" type="button" class="btn btn-outline-secondary" onclick="moveElbow(2, 1);">Em Repouso</button>
+                <button id="btnCotoveloEsquerdoLevementeContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(2, 2);">Levemente Contraído</button>
+                <button id="btnCotoveloEsquerdoContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(2, 3);">Contraído</button>
+                <button id="btnCotoveloEsquerdoFortementeContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(2, 4);">Fortemente Contraído</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Cotovelo Direito:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnCotoveloDireitoRepouso" type="button" class="btn btn-outline-secondary" onclick="moveElbow(1, 1);">Em Repouso</button>
+                <button id="btnCotoveloDireitoLevementeContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(1, 2);">Levemente Contraído</button>
+                <button id="btnCotoveloDireitoContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(1, 3);">Contraído</button>
+                <button id="btnCotoveloDireitoFortementeContraido" type="button" class="btn btn-outline-secondary" onclick="moveElbow(1, 4);">Fortemente Contraído</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Punho Esquerdo:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnPunhoEsquerdoMenos90" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 1);">Rotação -90º</button>
+                <button id="btnPunhoEsquerdoMenos45" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 2);">Rotação -45º</button>
+                <button id="btnPunhoEsquerdoRepouso" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 3);">Em Repouso</button>
+                <button id="btnPunhoEsquerdoMais45" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 4);">Rotação 45º</button>
+                <button id="btnPunhoEsquerdoMais90" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 5);">Rotação 90º</button>
+                <button id="btnPunhoEsquerdoMais135" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 6);">Rotação 135º</button>
+                <button id="btnPunhoEsquerdoMais180" type="button" class="btn btn-outline-secondary" onclick="moveFist(2, 7);">Rotação 180º</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group" style="width: 200px;">
+                <div class="input-group-text" id="btnGroupAddon2">Punho Direito:</div>
+            </div>
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                <button id="btnPunhoDireitoMenos90" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 1);">Rotação -90º</button>
+                <button id="btnPunhoDireitoMenos45" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 2);">Rotação -45º</button>
+                <button id="btnPunhoDireitoRepouso" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 3);">Em Repouso</button>
+                <button id="btnPunhoDireitoMais45" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 4);">Rotação 45º</button>
+                <button id="btnPunhoDireitoMais90" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 5);">Rotação 90º</button>
+                <button id="btnPunhoDireitoMais135" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 6);">Rotação 135º</button>
+                <button id="btnPunhoDireitoMais180" type="button" class="btn btn-outline-secondary" onclick="moveFist(1, 7);">Rotação 180º</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+
+    <script type="text/javascript">
+
+        $("form[name='controller']").validate({
+            onfocusout: false,
+            onkeyup: false,
+            rules: {
+                Id: "required",
+            },
+            messages: {
+                Id: "O campo Id é obrigatório.",
+            },
+            submitHandler: function (form) {
+                /*form.submit();*/
+            }
+        });
+
+        $('#btn_aplicar').on('click', function (e) {
+            e.preventDefault();
+
+            var form = $('#controllerForm');
+
+            if ((form.valid()) && (form.valid())) {
+                getRobot();
+            }
+        });
+
+        $('#btn_trocar').on('click', function (e) {
+            e.preventDefault();
+
+            $('#btn_aplicar').show();
+            $('#btn_trocar').hide();
+            $('#details').hide();
+            $('#update').hide();
+            $('#robotId').val('');
+            $('#robotId').prop("disabled", false);
+        });
+
+        function getRobot() {
+            var url = "@ViewBag.RobotUrl" + "/" + $('#robotId').val();
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $('#btn_aplicar').hide();
+                    $('#btn_trocar').show();
+                    $('#robotId').prop("disabled", true);
+
+                    $('#sNomeRobo').text(data.name);
+                    $('#sDescricaoRobo').text(data.description);
+                    $('#sRotacaoCabeca').text(data.head.rotationStateDescription);
+                    $('#sInclinacaoCabeca').text(data.head.inclinationStateDescription);
+                    $('#sCotoveloBracoEsquerdo').text(data.leftArm.elbow.stateDescription);
+                    $('#sCotoveloBracoDireito').text(data.rightArm.elbow.stateDescription);
+                    $('#sPunhoBracoEsquerdo').text(data.leftArm.fist.stateDescription);
+                    $('#sPunhoBracoDireito').text(data.rightArm.fist.stateDescription);
+
+                    $('#details').show();
+                    $('#update').show();
+                }
+            });
+        }
+
+        function changeHeadRotation(newStateId) {
+            var url = "@ViewBag.RobotUrl" + "/" + $('#robotId').val() + "/movehead";
+
+            var dados = {
+                newHeadRotationState: newStateId
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(dados),
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    getRobot();
+                },
+                error: function (jqXHR, exception) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        function changeHeadInclination(newStateId) {
+            var url = "@ViewBag.RobotUrl" + "/" + $('#robotId').val() + "/movehead";
+
+            var dados = {
+                newHeadInclinationState: newStateId
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(dados),
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    getRobot();
+                },
+                error: function (jqXHR, exception) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        function moveElbow(armSide, newStateId) {
+            var url = "@ViewBag.RobotUrl" + "/" + $('#robotId').val() + "/moveelbow";
+
+            var dados = {
+                armSide: armSide,
+                newElbowState: newStateId
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(dados),
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    getRobot();
+                },
+                error: function (jqXHR, exception) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        function moveFist(armSide, newStateId) {
+            var url = "@ViewBag.RobotUrl" + "/" + $('#robotId').val() + "/movefist";
+
+            var dados = {
+                armSide: armSide,
+                newFistState: newStateId
+            }
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: JSON.stringify(dados),
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    getRobot();
+                },
+                error: function (jqXHR, exception) {
+                    alert(jqXHR.responseJSON.message);
+                }
+            });
+        }
+
+        (function ($) {
+            $('#btn_trocar').hide();
+            $('#details').hide();
+            $('#update').hide();
+        })(jQuery);
+    </script>
+}

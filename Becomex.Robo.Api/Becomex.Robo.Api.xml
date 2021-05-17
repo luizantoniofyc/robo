@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Becomex.Robo.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Becomex.Robo.Api.Controllers._Shared.BaseController">
+            <summary>
+            Base controller.
+            </summary>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.Create(Microsoft.AspNetCore.Mvc.ApiVersion,Becomex.Robo.Application.Models.Input.RobotInput)">
+            <summary>
+            Create a new robot
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="model">Robot to be created</param>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.GetRobots(Microsoft.AspNetCore.Mvc.ApiVersion)">
+            <summary>
+             Gets a list of robots
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <returns>A collection of robots</returns>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.GetRobot(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid)">
+            <summary>
+            Get a specific robot
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+            <returns>A specific robot.</returns>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.Update(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid,Becomex.Robo.Application.Models.Input.RobotInput)">
+            <summary>
+            Update a specific robot
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+            <param name="model">Robot to be updated</param>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.Update(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid)">
+            <summary>
+            Fix a specific robot
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.MoveHead(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid,Becomex.Robo.Application.Models.Input.HeadMovementInput)">
+            <summary>
+            Move robot head
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+            <param name="model">How to move the robot head.</param>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.MoveElbow(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid,Becomex.Robo.Application.Models.Input.ElbowMovementInput)">
+            <summary>
+            Move robot elbow
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+            <param name="model">How to move the robot elbow.</param>
+        </member>
+        <member name="M:Becomex.Robo.Api.V1.Controllers.RobotController.MoveFist(Microsoft.AspNetCore.Mvc.ApiVersion,System.Guid,Becomex.Robo.Application.Models.Input.FistMovementInput)">
+            <summary>
+            Move robot fist
+            </summary>
+            <param name="apiVersion">API version. It`s automatically populated if using URL versioning.</param>
+            <param name="robotId">Robot Id</param>
+            <param name="model">How to move the robot fist.</param>
+        </member>
+    </members>
+</doc>
